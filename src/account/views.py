@@ -29,6 +29,7 @@ from django.contrib.auth.decorators import login_required
 class LoginView(View):
     def get(self, request, *args, **kwargs):
         form = LoginForm()
+        return render(request, 'login.html', {'form': form})
 
     def post(self, request, *args, **kwargs):
         form = LoginForm(request.POST or None)

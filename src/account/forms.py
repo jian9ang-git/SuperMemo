@@ -23,9 +23,9 @@ class LoginForm(forms.ModelForm):
                 raise forms.ValidationError('Неверный пароль')
         return self.cleaned_data
 
-    # class Meta:
-    #     model = User
-    #     fields = ['username', 'password']
+    class Meta:
+        model = User
+        fields = ['username', 'password']
 
 
 class RegistrationForm(forms.ModelForm):
