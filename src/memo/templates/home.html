@@ -1,10 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block title %}{% endblock %}
+
+{% block content %}
+
+<form class="container" action="{% url 'account:login' %}">
+
+      <button>Логин</button>
+</form>
+
+<form class="container" action="{% url 'account:registration' %}">
+
+      <button>Регистрация</button>
+</form>
+
+{% endblock %}

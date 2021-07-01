@@ -8,6 +8,6 @@ urlpatterns = [
     # path('password-change/', , name='password_change'),
     # path('password-change/done/', , name='password_change_done'),
 
-    path('/', HomePage.as_view, name='home'),
+    path('', HomePage.as_view(), name='home'),
 
 ]
