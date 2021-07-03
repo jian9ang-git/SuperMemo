@@ -8,4 +8,4 @@ class HomePage(View):
         return render(request, 'home.html', {})
 
     def post(self, request, *args, **kwargs):
-        pass
+        return render(request, 'home.html', {})

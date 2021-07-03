@@ -27,10 +27,12 @@ from django.contrib.auth.decorators import login_required
 
 
 class LoginView(View):
+    @staticmethod
     def get(self, request, *args, **kwargs):
         form = LoginForm()
         return render(request, 'login.html', {'form': form})
 
+    @staticmethod
     def post(self, request, *args, **kwargs):
         form = LoginForm(request.POST or None)
         if form.is_valid():
@@ -47,10 +49,12 @@ class LoginView(View):
 
 
 class RegistrationView(View):
-    def get(self, request, *args, **kwargs):
+    @staticmethod
+    def get(request, *args, **kwargs):
         form = RegistrationForm(request.POST or None)
-        return render(request, 'register.html', {'form': form})
+        return render(request, 'registration/registration.html', {'form': form})
 
+    @staticmethod
     def post(self, request, *args, **kwargs):
         form = RegistrationForm(request.POST or None)
         if form.is_valid():
