@@ -1,9 +1,9 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.views import View
 from .forms import LoginForm, RegistrationForm
-from .models import MemoUser
+from memo.models import Goal, Question, User
 from django.contrib.auth.decorators import login_required
 
 
@@ -28,12 +28,12 @@ from django.contrib.auth.decorators import login_required
 
 class LoginView(View):
     @staticmethod
-    def get(self, request, *args, **kwargs):
+    def get(request, *args, **kwargs):
         form = LoginForm()
         return render(request, 'login.html', {'form': form})
 
     @staticmethod
-    def post(self, request, *args, **kwargs):
+    def post(request, *args, **kwargs):
         form = LoginForm(request.POST or None)
         if form.is_valid():
             cd = form.cleaned_data
@@ -55,15 +55,23 @@ class RegistrationView(View):
         return render(request, 'registration/registration.html', {'form': form})
 
     @staticmethod
-    def post(self, request, *args, **kwargs):
+    def post(request, *args, **kwargs):
         form = RegistrationForm(request.POST or None)
         if form.is_valid():
-            new_user =form.save(commit=False)
+            new_user = form.save(commit=False)
             new_user.username = form.cleaned_data['username']
             new_user.password = form.cleaned_data['password']
             new_user.confirm_password = form.cleaned_data['confirm_password']
             new_user.email = form.cleaned_data['email']
             new_user.save()
             new_user.set_password(form.cleaned_data['password'])
-            MemoUser.objects.create()
+
+            goals = Goal
+            questions = Question
+            MemoUser.objects.create(
+                user=new_user,
+                goals=goals,
+                questions=questions,
+            )
+        return HttpResponse('Успех')
 
