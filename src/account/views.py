@@ -68,6 +68,6 @@ class RegistrationView(View):
             Profile.objects.create(
                 user=new_user,
             )
-        return render(request, 'home.html', {})
-        #return redirect('memo:home')
+        # return render(request, 'home.html', {})
+        return redirect('memo:home')
 

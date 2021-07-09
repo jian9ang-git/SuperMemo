@@ -5,7 +5,7 @@ from django.conf import settings
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    photo = models.ImageField(upload_to='user_images/%Y/%m/%d', default=None)
+    photo = models.ImageField(upload_to='user_images/%Y/%m/%d', default='user_images/default.jpg')
 
 
 class Goal(models.Model):
