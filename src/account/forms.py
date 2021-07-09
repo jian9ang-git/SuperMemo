@@ -1,5 +1,6 @@
 from django import forms
-from memo.models import User
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import User
 
 
 class LoginForm(forms.ModelForm):
@@ -9,8 +10,8 @@ class LoginForm(forms.ModelForm):
         self.fields['username'].label = 'Логин'
         self.fields['password'].label = 'Пароль'
 
-    username = forms.CharField(min_length=3, max_length=20, required=True)
-    password = forms.CharField(required=True, max_length=20, widget=forms.PasswordInput)
+    username = forms.CharField()
+    password = forms.CharField(widget=forms.PasswordInput)
 
     def clean(self):
         username = self.cleaned_data['username']
@@ -59,10 +60,14 @@ class RegistrationForm(forms.ModelForm):
     def clean(self):
         password = self.cleaned_data['password']
         confirm_password = self.cleaned_data['confirm_password']
-        if password and confirm_password and password != confirm_password:
+        if password != confirm_password:
             raise forms.ValidationError(f'Пароли не совпадают')
         return self.cleaned_data
 
     class Meta:
         model = User
         fields = ['username', 'password', 'confirm_password', 'email']
+
+
+
+

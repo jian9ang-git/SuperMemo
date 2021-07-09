@@ -7,5 +7,6 @@ class HomePage(View):
     def get(request, *args, **kwargs):
         return render(request, 'home.html', {})
 
-    def post(self, request, *args, **kwargs):
+    @staticmethod
+    def post(request, *args, **kwargs):
         return render(request, 'home.html', {})

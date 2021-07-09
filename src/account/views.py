@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.views import View
 from .forms import LoginForm, RegistrationForm
-from memo.models import Goal, Question, User
+from memo.models import Profile, Goal, Question
 from django.contrib.auth.decorators import login_required
 
 
@@ -60,18 +60,14 @@ class RegistrationView(View):
         if form.is_valid():
             new_user = form.save(commit=False)
             new_user.username = form.cleaned_data['username']
-            new_user.password = form.cleaned_data['password']
-            new_user.confirm_password = form.cleaned_data['confirm_password']
+            new_user.set_password(form.cleaned_data['password'])
             new_user.email = form.cleaned_data['email']
             new_user.save()
             new_user.set_password(form.cleaned_data['password'])
 
-            goals = Goal
-            questions = Question
-            MemoUser.objects.create(
+            Profile.objects.create(
                 user=new_user,
-                goals=goals,
-                questions=questions,
             )
-        return HttpResponse('Успех')
+        return render(request, 'home.html', {})
+        #return redirect('memo:home')
 
