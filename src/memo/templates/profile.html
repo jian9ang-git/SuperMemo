@@ -5,19 +5,35 @@
 {% block content %}
 
 {% if profile %}
+<style>
+   table {
+    width: 20%; /* Ширина таблицы */
+    border: 4px double black; /* Рамка вокруг таблицы */
+    border-collapse: collapse; /* Отображать только одинарные линии */
+   }
+   th {
+    text-align: left; /* Выравнивание по левому краю */
+    background: #ccc; /* Цвет фона ячеек */
+    padding: 5px; /* Поля вокруг содержимого ячеек */
+    border: 1px solid black; /* Граница вокруг ячеек */
+   }
+   td {
+    padding: 5px; /* Поля вокруг содержимого ячеек */
+    border: 1px solid black; /* Граница вокруг ячеек */
+   }
+  </style>
+    <table class="profile" >
 
-<table class="profile" >
+        <tr><td ><img src="{{ post.profile.image.url }}" alt="img"></td></tr>
+        <tr><td ><a>{{profile.user.username}}</a></td></tr>
+        <tr> <td ><a>{{profile.user.email}}</a></td></tr>
 
-         <tr>
-             <img src="{{ post.profile.image.url }}" alt="img">
-             <td ><a>{{profile.user.username}}</a></td>
-             <td ><a>{{profile.user.firstname}}</a></td>
-             <td ><a>{{profile.user.lastname}}</a></td>
-             <td ><a>{{profile.user.email}}</a></td>
-             <td ><a>{{profile.user.date_joined}}</a></td>
-         </tr>
+    <!--             <td ><a>{{profile.user.firstname}}</a></td>-->
+    <!--             <td ><a>{{profile.user.lastname}}</a></td>-->
+    <!--             <td ><a>{{profile.user.date_joined}}</a></td>-->
 
-</table>
+
+    </table>
 
 
 {% endif %}
