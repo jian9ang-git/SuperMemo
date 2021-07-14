@@ -1,6 +1,9 @@
 from django.urls import path
 from django.contrib.auth import login
 from .views import HomePage, ProfilePage
+from django.conf.urls.static import static
+from django.conf import settings
+
 
 
 urlpatterns = [
@@ -11,4 +14,4 @@ urlpatterns = [
     path('', HomePage.as_view(), name='home'),
     path('profile', ProfilePage.as_view(), name='profile'),
 
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
