@@ -8,7 +8,6 @@ class HomePage(View):
     def get(self, request, *args, **kwargs):
         return render(request, 'home.html', {})
 
-
     def post(self, request, *args, **kwargs):
         return render(request, 'home.html', {})
 
@@ -16,9 +15,9 @@ class HomePage(View):
 class ProfilePage(View):
 
     def get(self, request, *args, **kwargs):
-        profile = Profile.objects.get()
+        profile = Profile.objects.get(id=request.session['new_user_id'])
         return render(request, 'profile.html', {'profile': profile})
 
-
     def post(self, request, *args, **kwargs):
+        profile = Profile.objects.get(id=request.session['new_user_id'])
         return render(request, 'profile.html', {})

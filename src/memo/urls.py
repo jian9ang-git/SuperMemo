@@ -9,6 +9,6 @@ urlpatterns = [
     # path('password-change/done/', , name='password_change_done'),
 
     path('', HomePage.as_view(), name='home'),
-    path('', ProfilePage.as_view(), name='profile'),
+    path('profile', ProfilePage.as_view(), name='profile'),
 
 ]
