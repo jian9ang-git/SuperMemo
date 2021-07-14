@@ -2,6 +2,8 @@ from django.urls import path
 from django.contrib.auth import login
 # from .views import user_login
 from .views import LoginView, RegistrationView
+from django.conf.urls.static import static
+from django.conf import settings
 
 
 urlpatterns = [
@@ -11,4 +13,4 @@ urlpatterns = [
 
     path('login/', LoginView.as_view(), name='login'),
     path('registration/', RegistrationView.as_view(), name='registration'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

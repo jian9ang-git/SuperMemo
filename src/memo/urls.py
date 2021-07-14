@@ -12,6 +12,6 @@ urlpatterns = [
     # path('password-change/done/', , name='password_change_done'),
 
     path('', HomePage.as_view(), name='home'),
-    path('profile', ProfilePage.as_view(), name='profile'),
+    path('profile/<str:username>', ProfilePage.as_view(), name='profile'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

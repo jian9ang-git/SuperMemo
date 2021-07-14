@@ -69,8 +69,9 @@ class RegistrationView(View):
                 user=new_user,
             )
             profile = Profile.objects.get(pk=new_user_id)
+            username = new_user.username
             request.session['new_user_id'] = new_user_id
-        return redirect('memo:profile')
+        return redirect('memo:profile', username=username)
         # return render(request, 'profile.html', {'profile': profile})
 
 
