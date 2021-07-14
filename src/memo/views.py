@@ -17,7 +17,7 @@ class ProfilePage(View):
 
     def get(self, request, *args, **kwargs):
         user = User.objects.get(username=kwargs['username'])
-        profile = Profile.objects.get(user=user)
+        profile = user.profile
         return render(request, 'profile.html', {'profile': profile})
 
     def post(self, request, *args, **kwargs):
