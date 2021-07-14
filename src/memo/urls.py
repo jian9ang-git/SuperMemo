@@ -1,6 +1,6 @@
 from django.urls import path
 from django.contrib.auth import login
-from .views import HomePage
+from .views import HomePage, ProfilePage
 
 
 urlpatterns = [
@@ -9,5 +9,6 @@ urlpatterns = [
     # path('password-change/done/', , name='password_change_done'),
 
     path('', HomePage.as_view(), name='home'),
+    path('', ProfilePage.as_view(), name='profile'),
 
 ]

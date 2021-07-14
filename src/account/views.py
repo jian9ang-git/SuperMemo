@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login
 from django.views import View
 from .forms import LoginForm, RegistrationForm
 from memo.models import Profile, Goal, Question
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
 
@@ -27,13 +28,11 @@ from django.contrib.auth.decorators import login_required
 
 
 class LoginView(View):
-    @staticmethod
-    def get(request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         form = LoginForm()
         return render(request, 'login.html', {'form': form})
 
-    @staticmethod
-    def post(request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         form = LoginForm(request.POST or None)
         if form.is_valid():
             cd = form.cleaned_data
@@ -49,13 +48,12 @@ class LoginView(View):
 
 
 class RegistrationView(View):
-    @staticmethod
-    def get(request, *args, **kwargs):
+
+    def get(self, request, *args, **kwargs):
         form = RegistrationForm(request.POST or None)
         return render(request, 'registration/registration.html', {'form': form})
 
-    @staticmethod
-    def post(request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         form = RegistrationForm(request.POST or None)
         if form.is_valid():
             new_user = form.save(commit=False)
@@ -63,11 +61,15 @@ class RegistrationView(View):
             new_user.set_password(form.cleaned_data['password'])
             new_user.email = form.cleaned_data['email']
             new_user.save()
-            new_user.set_password(form.cleaned_data['password'])
+
+            new_user_id = new_user.id
 
             Profile.objects.create(
+                id=new_user_id,
                 user=new_user,
             )
-        # return render(request, 'home.html', {})
-        return redirect('memo:home')
+            profile = Profile.objects.get(pk=new_user_id)
+        return redirect()
+        # return render(request, 'profile.html', {'profile': profile})
+
 

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+
+{% if profile %}
+
+<table class="profile" >
+
+         <tr>
+             <td ><a>{{profile.image}}</a></td>
+             <td ><a>{{profile.user.username}}</a></td>
+             <td ><a>{{profile.user.firstname}}</a></td>
+             <td ><a>{{profile.user.lastname}}</a></td>
+             <td ><a>{{profile.user.email}}</a></td>
+             <td ><a>{{profile.user.date_joined}}</a></td>
+         </tr>
+
+</table>
+
+
+{% endif %}
+
+{% endblock %}
