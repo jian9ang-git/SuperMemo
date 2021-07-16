@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout, user_logged_in, user_logged_out
 from django.views import View
 from .forms import LoginForm, RegistrationForm
 from memo.models import Profile, Goal, Question
@@ -36,15 +36,26 @@ class LoginView(View):
         form = LoginForm(request.POST or None)
         if form.is_valid():
             cd = form.cleaned_data
-            user = authenticate(username=cd['username'], password=cd['password'])
+            username = cd['username']
+            password = cd['password']
+            user = authenticate(username=username, password=password)
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    return HttpResponse('Authenticated successfully')
+                    return redirect('memo:profile', username=username)
+                    # return HttpResponse('Authenticated successfully')
                 else:
                     return HttpResponse('Disabled account')
             else:
                 return HttpResponse('Invalid login')
+
+
+class LogoutView(View):
+    def get(self, request, *args, **kwargs):
+        logout(request)
+        return redirect('memo:home')
+
+
 
 
 class RegistrationView(View):

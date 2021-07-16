@@ -16,6 +16,8 @@ class HomePage(View):
 class ProfilePage(View):
 
     def get(self, request, *args, **kwargs):
+        #  user = User.objects.filter(profile__id=request.session['user_id']).first()
+        #  user = User.objects.filter(id=request.session['user_id']).first()
         user = User.objects.get(username=kwargs['username'])
         profile = user.profile
         return render(request, 'profile.html', {'profile': profile})
