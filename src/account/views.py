@@ -56,10 +56,7 @@ class LogoutView(View):
         return redirect('memo:home')
 
 
-
-
 class RegistrationView(View):
-
     def get(self, request, *args, **kwargs):
         form = RegistrationForm(request.POST or None)
         return render(request, 'registration/registration.html', {'form': form})
@@ -90,9 +87,11 @@ class RegistrationView(View):
                 user=new_user,
             )
             profile = Profile.objects.get(pk=new_user_id)
-            username = new_user.username
+            username = cd['username']
             request.session['user_id'] = new_user_id
+
         return redirect('memo:profile', username=username)
-        # return render(request, 'profile.html', {'profile': profile})
+        #  return redirect('memo:profile', pk=cd['id'])
+
 
 

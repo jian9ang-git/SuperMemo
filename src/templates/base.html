@@ -19,6 +19,10 @@
 
             <button>Registration</button>
       </form>
+      <form class="container" action="{% url 'account:reset_form' %}">
+
+            <button>Forgot your password?</button>
+      </form>
  {% else %}
       <form class="container" action="{% url 'account:logout' %}">
 
