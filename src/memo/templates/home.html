@@ -4,14 +4,23 @@
 
 {% block content %}
 
-<form class="container" action="{% url 'account:login' %}">
 
-      <button>Логин</button>
-</form>
+ {% if not request.user.is_authenticated %}
+      <form class="container" action="{% url 'account:login' %}">
 
-<form class="container" action="{% url 'account:registration' %}">
+            <button>Login</button>
+      </form>
 
-      <button>Регистрация</button>
-</form>
+      <form class="container" action="{% url 'account:registration' %}">
+
+            <button>Registration</button>
+      </form>
+ {% else %}
+      <form class="container" action="{% url 'account:logout' %}">
+
+            <button>Logout</button>
+      </form>
+ {% endif %}
+
 
 {% endblock %}
