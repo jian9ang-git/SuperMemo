@@ -9,7 +9,22 @@
         {% endblock %}
     </title>
 </head>
+{% if not request.user.is_authenticated %}
+      <form class="container" action="{% url 'account:login' %}">
 
+            <button>Login</button>
+      </form>
+
+      <form class="container" action="{% url 'account:registration' %}">
+
+            <button>Registration</button>
+      </form>
+ {% else %}
+      <form class="container" action="{% url 'account:logout' %}">
+
+            <button>Logout</button>
+      </form>
+ {% endif %}
 <body>
     {% block content %}
 

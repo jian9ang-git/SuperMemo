@@ -68,11 +68,21 @@ class RegistrationView(View):
         form = RegistrationForm(request.POST or None)
         if form.is_valid():
             new_user = form.save(commit=False)
-            new_user.username = form.cleaned_data['username']
-            new_user.set_password(form.cleaned_data['password'])
-            new_user.email = form.cleaned_data['email']
+            cd = form.cleaned_data
+            new_user.username = cd['username']
+            new_user.set_password(cd['password'])
+            new_user.email = cd['email']
             new_user.save()
-
+            #  --------------------------------------------------------------------------
+            user = authenticate(username=cd['username'], password=cd['password'])
+            if user is not None:
+                if user.is_active:
+                    login(request, user)
+                else:
+                    return HttpResponse('Disabled account')
+            else:
+                return HttpResponse('Invalid login')
+            #  --------------------------------------------------------------------------
             new_user_id = new_user.id
 
             Profile.objects.create(

@@ -1,6 +1,7 @@
 {% block title %}{% endblock %}
 
 {% block content %}
+{% csrf_token %}
     <h1>Log-in</h1>
     <p>Please, use the following form to log-in:</p>
     <form action="." method="post">
