@@ -90,10 +90,9 @@ class RegistrationView(View):
             username = cd['username']
             request.session['user_id'] = new_user_id
         else:
+            # raise Exception(form.errors)
             return render(request, 'registration/registration.html', {'form': form})
         return redirect('memo:profile', username=username)
-
-
         #  return redirect('memo:profile', pk=cd['id'])
 
 
