@@ -8,10 +8,6 @@ from django.contrib.auth import views as auth_views
 
 
 urlpatterns = [
-    # path('login/', user_login, name='login'),
-    # path('password-change/', , name='password_change'),
-    # path('password-change/done/', , name='password_change_done'),
-
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('registration/', RegistrationView.as_view(), name='registration'),
@@ -19,6 +15,7 @@ urlpatterns = [
     path('password-reset/',
          auth_views.PasswordResetView.as_view(
              template_name='registration/password_reset_form.html',
+             subject_template_name='registration/password_reset_subject.txt',
              email_template_name='registration/password_reset_email.html',
              success_url='/account/password-reset/done/'),
          name='password_reset'),
@@ -32,7 +29,7 @@ urlpatterns = [
     path('reset/<uidb64>/<token>/',
          auth_views.PasswordResetConfirmView.as_view(
              template_name='registration/password_reset_confirm.html',
-             success_url='/accounts/password_reset_complete/'),
+             success_url='/account/reset/done/'),
          name='password_reset_confirm'),
 
     path('reset/done/',
@@ -44,7 +41,7 @@ urlpatterns = [
     path('password-change/',
          auth_views.PasswordChangeView.as_view(
              template_name='registration/password_change_form.html',
-             success_url='/accounts/password_change_done'),
+             success_url='/account/password_change_done'),
          name='password_change'),
 
     path('password-change-done/',

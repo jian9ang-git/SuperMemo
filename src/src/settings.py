@@ -3,13 +3,14 @@ import os
 import django_heroku
 from django.urls import reverse_lazy
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'jian9ang@gmail.com'
+EMAIL_HOST_PASSWORD = 'xoxhuxyteekzhsez'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
-LOGIN_REDIRECT_URL = reverse_lazy('profile')
-LOGIN_URL = reverse_lazy('login')
-LOGOUT_URL = reverse_lazy('logout')
-
-
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
