@@ -31,9 +31,13 @@
     <!--             <td ><a>{{profile.user.firstname}}</a></td>-->
     <!--             <td ><a>{{profile.user.lastname}}</a></td>-->
     <!--             <td ><a>{{profile.user.date_joined}}</a></td>-->
-
-
+        <td>
+            <form class="container" action="{% url 'memo:edit' %}">
+                <button>Edit</button>
+            </form>
+        </td>
     </table>
+
 
 <!--<form class="container" action="{% url 'account:logout'%}">-->
 

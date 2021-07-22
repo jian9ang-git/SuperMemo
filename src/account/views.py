@@ -42,12 +42,16 @@ class LoginView(View):
             if user is not None:
                 if user.is_active:
                     login(request, user)
+                    request.session['user_id'] = user.id
                     return redirect('memo:profile', username=username)
                     # return HttpResponse('Authenticated successfully')
                 else:
                     return HttpResponse('Disabled account')
             else:
                 return HttpResponse('Invalid login')
+        else:
+            # raise Exception(form.errors)
+            return render(request, 'login.html', {'form': form})
 
 
 class LogoutView(View):
