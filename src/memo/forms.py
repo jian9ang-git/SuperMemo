@@ -6,15 +6,26 @@ from .models import Profile
 
 
 class PersonalDataEditForm(forms.ModelForm):
+    username = forms.CharField(required=False, min_length=3, max_length=150, )
+    email = forms.EmailField(required=False)
+    first_name = forms.CharField(required=False, min_length=3, max_length=150)
+    last_name = forms.CharField(required=False, min_length=3, max_length=150)
 
     def clean(self):
         username = self.cleaned_data['username']
         email = self.cleaned_data['email']
-        if User.objects.filter(username=username).exists():
+        user_name = 'username'
+        e_mail = 'email'
+        chd = self.changed_data
+        if User.objects.filter(username=username).exists() and user_name in chd:
+            if User.objects.filter(email=email).exists() and e_mail in chd:
+                raise forms.ValidationError(f'Логин {username} и почта {email} уже существуют.')
             raise forms.ValidationError(f'Пользователь с логином {username} уже существует.')
-        elif User.objects.filter(email=email).exists():
+
+        elif User.objects.filter(email=email).exists() and e_mail in chd:
             raise forms.ValidationError(f'Пользователь с логином {email} уже существует.')
-        return self.cleaned_data
+
+
 
     class Meta:
         model = User

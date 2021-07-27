@@ -47,22 +47,21 @@ class ProfilePageBasic(View):
 
 class EditPage(View):
     def get(self, request, *args, **kwargs):
-        # profile = Profile.objects.get(pk=request.session['user_id'])
-        # form = PersonalDataEditForm()
-        # return render(request, 'edit.html', {'profile': profile, 'form': form})
-        return render(request, 'edit.html')
+        user = User.objects.get(pk=request.session['user_id'])
+        form = PersonalDataEditForm(initial={'username': user.username,
+                                             'email': user.email,
+                                             'first_name': user.first_name,
+                                             'last_name': user.last_name},
+                                    instance=request.user)
+        return render(request, 'edit.html', {'form': form})
 
     def post(self, request, *args, **kwargs):
-        # user = User.objects.get(pk=request.session['user_id'])
-        # form = PersonalDataEditForm(request.POST or None)
-        # cd = form.cleaned_data
-        # user.username = cd['username']
-        # user.email = cd['email']
-        # user.first_name = cd['first_name']
-        # user.last_name = cd['last_name']
-        # user.save()
-        # return redirect('memo:profile', username=cd['username'])
-        return render(request, 'edit.html')
+        form = PersonalDataEditForm(request.POST, instance=request.user)
+        if form.is_valid():
+            # user = User.objects.get(pk=request.session['user_id'])
+            user = form.save(commit=True)
+            return redirect('memo:profile', user.username)
+        return render(request, 'edit.html', {'form': form})
 
 # class EditPasswordPage(View):
 #     def get(self, request, *args, **kwargs):
