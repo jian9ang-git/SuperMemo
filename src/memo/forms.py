@@ -25,8 +25,6 @@ class PersonalDataEditForm(forms.ModelForm):
         elif User.objects.filter(email=email).exists() and e_mail in chd:
             raise forms.ValidationError(f'Пользователь с логином {email} уже существует.')
 
-
-
     class Meta:
         model = User
         fields = ['username', 'email', 'first_name', 'last_name']
