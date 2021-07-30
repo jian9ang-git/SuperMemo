@@ -31,7 +31,6 @@ class LoginView(View):
             else:
                 return HttpResponse('Invalid login')
         else:
-            # raise Exception(form.errors)
             return render(request, 'login.html', {'form': form})
 
 
@@ -71,14 +70,12 @@ class RegistrationView(View):
                 id=new_user_id,
                 user=new_user,
             )
-            profile = Profile.objects.get(pk=new_user_id)
             username = cd['username']
             request.session['user_id'] = new_user_id
         else:
-            # raise Exception(form.errors)
             return render(request, 'registration/registration.html', {'form': form})
         return redirect('memo:profile', username=username)
-        #  return redirect('memo:profile', pk=cd['id'])
+
 
 
 
