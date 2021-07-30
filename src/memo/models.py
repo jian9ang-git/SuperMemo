@@ -18,9 +18,9 @@ class Goal(models.Model):
 
 
 class Question(models.Model):
-    theme = models.SlugField(max_length=100, db_index=True, default=None)
-    question = models.CharField(max_length=100)
-    answer = models.CharField(max_length=100)
+    theme = models.CharField(max_length=200, db_index=True, default=None)
+    question = models.CharField(max_length=500)
+    answer = models.CharField(max_length=500)
     goal = models.ForeignKey(Goal, verbose_name='Цель', related_name='questions', on_delete=models.CASCADE,
                              default=None)
     done = models.BooleanField(default=False)
