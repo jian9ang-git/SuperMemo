@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.db.models import OneToOneField
 
 
 class Profile(models.Model):
@@ -17,13 +18,38 @@ class Goal(models.Model):
         return self.name
 
 
-class Question(models.Model):
-    theme = models.CharField(max_length=200, db_index=True, default=None)
-    question = models.CharField(max_length=500)
-    answer = models.CharField(max_length=500)
-    goal = models.ForeignKey(Goal, verbose_name='Цель', related_name='questions', on_delete=models.CASCADE,
-                             default=None)
-    done = models.BooleanField(default=False)
+class Section(models.Model):
+    name = models.CharField(max_length=50, default=None)
+    goal = models.ForeignKey(Goal, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.theme
+        return self.name
+
+
+class Theme(models.Model):
+    name = models.CharField(max_length=200, db_index=True, default=None)
+    section = models.ForeignKey(Section, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+
+class Lesson(models.Model):
+    name = models.CharField(max_length=200, db_index=True, default=None)
+    start = models.DateTimeField(auto_now_add=True)
+    end = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Question(models.Model):
+    question = models.CharField(max_length=500)
+    answer = models.CharField(max_length=500)
+    theme = models.ForeignKey(Theme, verbose_name='Цель', related_name='questions', on_delete=models.CASCADE,
+                              default=None)
+    lesson = models.ForeignKey(Lesson, related_name='questions', on_delete=models.CASCADE,
+                               default=None)
+
+    def __str__(self):
+        return self.question

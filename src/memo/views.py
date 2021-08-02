@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.views import View
-from memo.models import Profile, Goal, Question
+from memo.models import Profile, Goal, Question, Theme
 from django.contrib.auth.models import User
 from .forms import PersonalDataEditForm, AddGoalForm
 
@@ -16,8 +16,6 @@ class HomePage(View):
 
 class ProfilePage(View):
     def get(self, request, *args, **kwargs):
-        #  user = User.objects.filter(profile__id=request.session['user_id']).first()
-        #  user = User.objects.filter(id=request.session['user_id']).first()
         user = User.objects.get(username=kwargs['username'])
         profile = user.profile
         goals = profile.goals.all()
@@ -33,11 +31,17 @@ class ProfilePage(View):
 class ProfilePageBasic(View):
     def get(self, request, *args, **kwargs):
         username = request.user.username
-        return redirect('memo:profile', username=username)
+        if username:
+            return redirect('memo:profile', username=username)
+        else:
+            return redirect('account:login')
 
     def post(self, request, *args, **kwargs):
         username = request.user.username
-        return redirect('memo:profile', username=username)
+        if username:
+            return redirect('memo:profile', username=username)
+        else:
+            return redirect('account:login')
 
 
 class EditPage(View):
@@ -71,3 +75,12 @@ class AddGoalPage(View):
             profile = user.profile
             goal = Goal.objects.create(name=cd['name'], profile=profile)
         return redirect('memo:profile_basic')
+
+
+class GoalPage(View):
+    def get(self, request, *args, **kwargs):
+        questions = Question.objects.get(goal__id=kwargs['id'])
+        return render(request, 'goal_page.html', {'questions': questions})
+
+    def post(self, request, *args, **kwargs):
+        pass

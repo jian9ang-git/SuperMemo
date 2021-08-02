@@ -49,18 +49,13 @@
 <table class="goals" >
     {% for goal in goals %}
     <tr>
-        <td ><a>{{goal}}</a></td>
+
         <td>
-            <form class="container" action="#">
-                <button>Learn</button>
+            <form class="container" action="{% url 'memo:goal_page' goal.id %}">
+                <button>{{goal}}</button>
             </form>
         </td>
 
-        <td>
-            <form class="container" action="#">
-                <button>Repeat</button>
-            </form>
-        </td>
     </tr>
 
     {% endfor %}
