@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'memo',
     'account',
+    'lesson',
 ]
 
 MIDDLEWARE = [
@@ -127,7 +128,7 @@ STATICFILES_DIRS = [
 ]
 
 
-CART_SESSION_ID = 'cart'
+LESSON_SESSION_ID = 'lesson'
 
 
 MEDIA_URL = "/media/"
