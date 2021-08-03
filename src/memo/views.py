@@ -79,8 +79,11 @@ class AddGoalPage(View):
 
 class GoalPage(View):
     def get(self, request, *args, **kwargs):
-        questions = Question.objects.get(goal__id=kwargs['id'])
-        return render(request, 'goal_page.html', {'questions': questions})
+        goal = Goal.objects.get(pk=kwargs['goal_id'])
+        goal_name = goal.name
+        sections = goal.sections.all()
+        themes = goal.themes.all()
+        return render(request, 'goal_page.html', {'sections': sections, 'themes': themes, 'goal': goal})
 
     def post(self, request, *args, **kwargs):
         pass
