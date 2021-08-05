@@ -1,7 +1,11 @@
-{% if %}
-{% endif %}
-{% for %}
-{% endfor %}
+{% extends "base.html" %}
+{% block content %}
+<h1>Lesson</h1>
+<p>Lesson {{lesson_name}}</p>
 
-{% if %}
-{% endif %}
+<form class="container" method="POST">
+{{ form.as_p }}
+    <input type="submit" value="next question">
+    {% csrf_token %}
+</form>
+{% endblock %}
