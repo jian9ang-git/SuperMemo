@@ -20,7 +20,7 @@ class Goal(models.Model):
 
 class Section(models.Model):
     name = models.CharField(max_length=50, default=None)
-    goal = models.ForeignKey(Goal, related_name='sections', on_delete=models.CASCADE)
+    goal = models.ForeignKey(Goal, related_name='sections', on_delete=models.CASCADE, default=None)
 
     def __str__(self):
         return self.name
@@ -29,7 +29,7 @@ class Section(models.Model):
 class Theme(models.Model):
     name = models.CharField(max_length=200, db_index=True, default=None)
     section = models.ForeignKey(Section, related_name='sections', on_delete=models.CASCADE)
-    goal = models.ForeignKey(Goal, related_name='themes', on_delete=models.CASCADE)
+    goal = models.ForeignKey(Goal, related_name='themes', on_delete=models.CASCADE, default=None)
 
     def __str__(self):
         return self.name
@@ -39,7 +39,7 @@ class Lesson(models.Model):
     name = models.IntegerField(default=1)
     start = models.DateTimeField(auto_now_add=True)
     end = models.DateTimeField(auto_now=True)
-    goal = models.ForeignKey(Goal, related_name='lessons',  on_delete=models.CASCADE)
+    goal = models.ForeignKey(Goal, related_name='lessons',  on_delete=models.CASCADE, default=None)
 
     def __str__(self):
         return self.name
@@ -53,7 +53,7 @@ class Question(models.Model):
     theme = models.ForeignKey(Theme, verbose_name='Цель', related_name='questions', on_delete=models.CASCADE,
                               default=None)
     section = models.ForeignKey(Section, related_name='questions', on_delete=models.CASCADE)
-    goal = models.ForeignKey(Goal, on_delete=models.CASCADE)
+    goal = models.ForeignKey(Goal, on_delete=models.CASCADE, default=None)
 
     def __str__(self):
         return self.question
