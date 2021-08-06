@@ -3,15 +3,13 @@
 <h1>Lesson</h1>
 <p>Lesson {{lesson_name}}</p>
 
+
+{% for item in lesson %}
+{{ item.question }}
+{% endblock %}
+
 <form class="container" method="POST">
 {{ form.as_p }}
     <input type="submit" value="next question">
     {% csrf_token %}
 </form>
-
-<form class="container" action="{% url 'lesson:end_lesson' %}">
-            <button>End lesson {{lesson_name}}</button>
-    {% csrf_token %}
-</form>
-
-{% endblock %}

@@ -2,8 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from django.views.decorators.http import require_POST
 from .lesson import LessonCart
-from memo.models import Lesson
-from memo.models import Question, Goal
+from memo.models import Lesson, Question, Goal, Theme, Section
 from .forms import LearningForm
 
 
@@ -12,27 +11,25 @@ def start_lesson(request, *args, **kwargs):
     request.session['goal_id'] = goal.id
     lesson_counter = goal.lessons.count()
     name = lesson_counter + 1
-    lesson = Lesson.objects.create(name=name, goal=goal)
+    # if goal.lessons.filter(active_lesson=True).exists()
+    lesson = Lesson.objects.create(name=name, goal=goal, active_lesson=True)
     request.session['lesson_id'] = lesson.id
     request.session['lesson_name'] = lesson.name
     return redirect('lesson:lesson_page')
 
 
-@require_POST
-def next_lesson(request, *args, **kwargs):
-    pass
-
-
 class LessonPage(View):
     def get(self, request, *args, **kwargs):
         goal = Goal.objects.get(pk=request.session['goal_id'])
-        section = request.session['section']
-        theme = request.session['theme']
-        if section != '' and theme != '':
-            form = LearningForm(initial={'section': section, 'theme': theme},
-                                instance=goal)
+        theme = request.user.profile.goals.filter(themes__last_used=True).first()
+        if theme:
+            section = theme.section
         else:
-            form = LearningForm(instance=goal)
+            section = 'Enter your first goal section here'
+            theme = 'Enter your first goal theme here'
+        form = LearningForm(initial={'section': section, 'theme': theme},
+                            instance=goal)
+
         return render(request, 'lesson.html', {'form': form, 'lesson_name': request.session['lesson_name']})
 
     def post(self, request, *args, **kwargs):
@@ -43,8 +40,8 @@ class LessonPage(View):
             cd = form.cleaned_data
             question = Question.objects.create(question=cd['question'],
                                                answer=cd['answer'],
-                                               theme=cd['theme'],
-                                               section=cd['section'],
+                                               theme=Theme.objects.get(name=cd['theme']),
+                                               section=Section.objects.get(name=cd['section']),
                                                goal=lesson.goal)
             lesson_cart.add(question=question)
             request.session['section'] = cd['section']
@@ -54,7 +51,14 @@ class LessonPage(View):
 
 class EndLessonPage(View):
     def get(self, request, *args, **kwargs):
-        pass
+        lesson_cart = LessonCart(request)
+        lesson = Lesson.objects.get(pk=request.session['lesson_id'])
+
+        return render(request, 'end_lesson.html', {'lesson_cart': lesson_cart})
 
     def post(self, request, *args, **kwargs):
-        pass
+        lesson_cart = LessonCart(request)
+        lesson = Lesson.objects.get(pk=request.session['lesson_id'])
+        lesson.set(active_lesson=False)
+
+

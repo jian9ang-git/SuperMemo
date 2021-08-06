@@ -5,6 +5,7 @@ from memo.models import Question
 
 
 class LessonCart(object):
+
     def __init__(self, request):
 
         self.session = request.session
@@ -28,11 +29,11 @@ class LessonCart(object):
             del self.lesson[question_id]
             self.save()
 
-    # def __iter__(self):
-    #     questions_ids = self.lesson.keys()
-    #     questions = Question.objects.filter(id__in=questions_ids)
-    #     for question in questions:
-    #         self.lesson[str(question.id)]['product'] = question
+    def __iter__(self):
+        questions_ids = self.lesson.keys()
+        questions = Question.objects.filter(id__in=questions_ids)
+        for question in questions:
+            self.lesson[str(question.id)]['product'] = question
 
     def __len__(self):
         return sum(1 for item in self.lesson.keys())

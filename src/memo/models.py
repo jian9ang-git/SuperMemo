@@ -28,8 +28,9 @@ class Section(models.Model):
 
 class Theme(models.Model):
     name = models.CharField(max_length=200, db_index=True, default=None)
-    section = models.ForeignKey(Section, related_name='sections', on_delete=models.CASCADE)
+    section = models.ForeignKey(Section, related_name='themes', on_delete=models.CASCADE)
     goal = models.ForeignKey(Goal, related_name='themes', on_delete=models.CASCADE, default=None)
+    last_used = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -40,6 +41,7 @@ class Lesson(models.Model):
     start = models.DateTimeField(auto_now_add=True)
     end = models.DateTimeField(auto_now=True)
     goal = models.ForeignKey(Goal, related_name='lessons',  on_delete=models.CASCADE, default=None)
+    active_lesson = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -57,3 +59,6 @@ class Question(models.Model):
 
     def __str__(self):
         return self.question
+
+
+

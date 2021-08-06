@@ -64,7 +64,7 @@ class EditPage(View):
                                              'email': user.email,
                                              'first_name': user.first_name,
                                              'last_name': user.last_name},
-                                    instance=request.user)
+                                    instance=user)
         return render(request, 'edit.html', {'form': form})
 
     def post(self, request, *args, **kwargs):
@@ -78,13 +78,8 @@ class EditPage(View):
 class GoalPage(View):
     def get(self, request, *args, **kwargs):
         goal = Goal.objects.get(pk=kwargs['goal_id'])
-        goal_name = goal.name
         sections = goal.sections.all()
         themes = goal.themes.all()
-
-        request.session['section'] = ''
-        request.session['theme'] = ''
-
         return render(request, 'goal_page.html', {'sections': sections, 'themes': themes, 'goal': goal})
 
     def post(self, request, *args, **kwargs):
