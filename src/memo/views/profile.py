@@ -22,14 +22,6 @@ class ProfilePage(View):
         profile = user.profile
         goals = profile.goals.all()
 
-        if profile.lessons.filter(active_lesson=True).exists():
-            lesson = profile.lessons.get(active_lesson=True)
-            request.session['active_lesson'] = True
-            request.session['active_lesson_id'] = lesson.id
-            return render(request, 'profile.html', {'profile': profile,
-                                                    'username': kwargs['username'],
-                                                    'goals': goals, 'lesson_id': lesson.id})
-
         return render(request, 'profile.html', {'profile': profile,
                                                 'username': kwargs['username'],
                                                 'goals': goals})
@@ -66,7 +58,7 @@ class EditPage(View):
         return render(request, 'edit.html', {'form': form})
 
     def post(self, request, *args, **kwargs):
-        form = PersonalDataEditForm(request.POST or None, instance=request.user)  # !!!!!!!!!!!1
+        form = PersonalDataEditForm(request.POST or None, instance=request.user)
         if form.is_valid():
             user = form.save(commit=True)
             return redirect('memo:profile', user.username)

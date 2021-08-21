@@ -5,17 +5,34 @@
 {% block content %}
 
 
-{% for section in sections %}
-{{section}}
-{% endfor %}
+<style>
+   table {
+    width: 20%; /* Ширина таблицы */
+    border: 4px double black; /* Рамка вокруг таблицы */
+    border-collapse: collapse; /* Отображать только одинарные линии */
+   }
+   th {
+    text-align: left; /* Выравнивание по левому краю */
+    background: #ccc; /* Цвет фона ячеек */
+    padding: 5px; /* Поля вокруг содержимого ячеек */
+    border: 1px solid black; /* Граница вокруг ячеек */
+   }
+   td {
+    padding: 5px; /* Поля вокруг содержимого ячеек */
+    border: 1px solid black; /* Граница вокруг ячеек */
+   }
+  </style>
+<table class="section" >
+    {% for section in sections %}
+    <tr><td ><a>{{section.name}}</a></td></tr>
+    {% endfor %}
+    <tr><td >
+        <form class="container" action="{% url 'memo:add_section' goal.id %}">
+            <button>Add Section</button>
+        </form>
+    </td></tr>
+</table>
 
-{% for theme in themes %}
-{{theme}}
-{% endfor %}
-
-{% for goal in goals %}
-{{goal}}
-{% endfor %}
 
 
     <tr>
@@ -24,13 +41,7 @@
                 <button>Start lesson</button>
             </form>
         </td>
-
-<!--        <td>-->
-<!--            <form class="container" action="#">-->
-<!--                <button>Repeat</button>-->
-<!--            </form>-->
-<!--        </td>-->
-<!--    </tr>-->
+    <tr>
 
 
 

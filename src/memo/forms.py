@@ -2,7 +2,7 @@ from django import forms
 
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import User
-from .models import Profile, Goal, Question
+from .models import Profile, Goal, Question, Section, Theme
 
 
 class PersonalDataEditForm(forms.ModelForm):
@@ -39,4 +39,16 @@ class AddGoalForm(forms.ModelForm):
 
     class Meta:
         model = Goal
+        fields = ['name']
+
+
+class AddSectionForm(forms.ModelForm):
+    name = forms.CharField(required=True, min_length=3, max_length=150)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['name'].label = 'Name your section'
+
+    class Meta:
+        model = Section
         fields = ['name']

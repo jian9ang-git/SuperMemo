@@ -5,6 +5,8 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib.auth import views as auth_views
 
+from .views.goals import AddSectionPage
+
 urlpatterns = [
     path('', HomePage.as_view(), name='home'),
     path('profile/', ProfilePageBasic.as_view(), name='profile_basic'),
@@ -12,6 +14,7 @@ urlpatterns = [
     path('profile/edit/', EditPage.as_view(), name='edit'),
     path('profile/add-goal/', AddGoalPage.as_view(), name='add_goal'),
     path('goal-page/<int:goal_id>', GoalPage.as_view(), name='goal_page'),
+    path('profile/goal<int:goal_id>/add-section/', AddSectionPage.as_view(), name='add_section'),
 
     path('profile/edit/password_change/',
          auth_views.PasswordChangeView.as_view(
