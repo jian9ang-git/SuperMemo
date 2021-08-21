@@ -1,6 +1,6 @@
 from django.urls import path
 from django.contrib.auth import login
-from .views import HomePage, ProfilePage, EditPage, ProfilePageBasic, GoalPage, add_goal
+from .views import HomePage, ProfilePage, EditPage, ProfilePageBasic, GoalPage, AddGoalPage
 from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib.auth import views as auth_views
@@ -10,7 +10,7 @@ urlpatterns = [
     path('profile/', ProfilePageBasic.as_view(), name='profile_basic'),
     path('profile/<str:username>', ProfilePage.as_view(), name='profile'),
     path('profile/edit/', EditPage.as_view(), name='edit'),
-    path('profile/add-goal/', add_goal, name='add_goal'),
+    path('profile/add-goal/', AddGoalPage.as_view(), name='add_goal'),
     path('goal-page/<int:goal_id>', GoalPage.as_view(), name='goal_page'),
 
     path('profile/edit/password_change/',

@@ -5,18 +5,7 @@ from django.views.decorators.http import require_POST
 
 from memo.models import Profile, Goal, Question, Theme
 from django.contrib.auth.models import User
-from .forms import PersonalDataEditForm, AddGoalForm
-
-
-@require_POST
-def add_goal(self, request, *args, **kwargs):
-    form = AddGoalForm(request.POST or None)
-    if form.is_valid():
-        cd = form.cleaned_data
-        user = request.user
-        profile = user.profile
-        goal = Goal.objects.create(name=cd['name'], profile=profile)
-    return redirect('memo:profile_basic')
+from memo.forms import PersonalDataEditForm, AddGoalForm
 
 
 class HomePage(View):
@@ -32,6 +21,15 @@ class ProfilePage(View):
         user = User.objects.get(username=kwargs['username'])
         profile = user.profile
         goals = profile.goals.all()
+
+        if profile.lessons.filter(active_lesson=True).exists():
+            lesson = profile.lessons.get(active_lesson=True)
+            request.session['active_lesson'] = True
+            request.session['active_lesson_id'] = lesson.id
+            return render(request, 'profile.html', {'profile': profile,
+                                                    'username': kwargs['username'],
+                                                    'goals': goals, 'lesson_id': lesson.id})
+
         return render(request, 'profile.html', {'profile': profile,
                                                 'username': kwargs['username'],
                                                 'goals': goals})
@@ -68,19 +66,8 @@ class EditPage(View):
         return render(request, 'edit.html', {'form': form})
 
     def post(self, request, *args, **kwargs):
-        form = PersonalDataEditForm(request.POST or None, instance=request.user)
+        form = PersonalDataEditForm(request.POST or None, instance=request.user)  # !!!!!!!!!!!1
         if form.is_valid():
             user = form.save(commit=True)
             return redirect('memo:profile', user.username)
         return render(request, 'edit.html', {'form': form})
-
-
-class GoalPage(View):
-    def get(self, request, *args, **kwargs):
-        goal = Goal.objects.get(pk=kwargs['goal_id'])
-        sections = goal.sections.all()
-        themes = goal.themes.all()
-        return render(request, 'goal_page.html', {'sections': sections, 'themes': themes, 'goal': goal})
-
-    def post(self, request, *args, **kwargs):
-        pass

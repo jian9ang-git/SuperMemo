@@ -8,8 +8,15 @@
 {{ item.question }}
 {% endblock %}
 
-<form class="container" method="POST">
-{{ form.as_p }}
-    <input type="submit" value="next question">
+<form class="container" method="POST" action="{% url 'lesson:end_lesson' %}">
+
+    <input type="submit" value="End lesson">
     {% csrf_token %}
 </form>
+
+<form class="container" method="POST" action="{% url 'lesson:lesson_page' %}">
+
+    <input type="submit" value="Continue lesson">
+    {% csrf_token %}
+</form>
+
