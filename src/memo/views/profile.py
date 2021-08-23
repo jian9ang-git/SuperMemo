@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.views.decorators.http import require_POST
 
-from memo.models import Profile, Goal, Question, Theme
+from memo.models import Profile, Goal, Question, Theme, Section
 from django.contrib.auth.models import User
 from memo.forms import PersonalDataEditForm, AddGoalForm
 
@@ -18,17 +18,16 @@ class HomePage(View):
 
 class ProfilePage(View):
     def get(self, request, *args, **kwargs):
-        user = User.objects.get(username=kwargs['username'])
-        profile = user.profile
+        profile = request.user.profile
         goals = profile.goals.all()
 
-        return render(request, 'profile.html', {'profile': profile,
-                                                'username': kwargs['username'],
-                                                'goals': goals})
+        return render(request, 'profile_page.html', {'profile': profile,
+                                                     'goals': goals,
+                                                     'username': kwargs['username']})
 
     def post(self, request, *args, **kwargs):
         profile = Profile.objects.get(pk=request.session['user_id'])
-        return render(request, 'profile.html', {})
+        return render(request, 'profile_page.html', {})
 
 
 class ProfilePageBasic(View):

@@ -22,23 +22,11 @@
     border: 1px solid black; /* Граница вокруг ячеек */
    }
   </style>
-<table class="section" >
-    {% for section in sections %}
-    <tr><td ><a>{{section.name}}</a></td></tr>
-    {% endfor %}
-    <tr><td >
-        <form class="container" action="{% url 'memo:add_section' goal.id %}">
-            <button>Add Section</button>
-        </form>
-    </td></tr>
-</table>
-
-
-
+<h1>{{goal.name}}</h1>
     <tr>
         <td>
-            <form class="container" action="{% url 'lesson:start_lesson' goal.id %}">
-                <button>Start lesson</button>
+            <form class="container" action="{% url 'lesson:choose_section' %}">
+                <button>Begin new lesson</button>
             </form>
         </td>
     <tr>

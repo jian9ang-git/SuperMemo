@@ -42,13 +42,4 @@ class AddGoalForm(forms.ModelForm):
         fields = ['name']
 
 
-class AddSectionForm(forms.ModelForm):
-    name = forms.CharField(required=True, min_length=3, max_length=150)
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['name'].label = 'Name your section'
-
-    class Meta:
-        model = Section
-        fields = ['name']

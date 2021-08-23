@@ -31,6 +31,7 @@ class Theme(models.Model):
     section = models.ForeignKey(Section, verbose_name='Section', related_name='themes', on_delete=models.CASCADE, null=True)
     goal = models.ForeignKey(Goal, verbose_name='Goal', related_name='themes', on_delete=models.CASCADE, null=True)
 
+
     def __str__(self):
         return self.name
 

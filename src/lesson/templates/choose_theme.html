@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{goal.name}}</h1>
+<h1>Choose theme of your chapter {{section.name}}</h1>
+
+<form class="container" method="POST">
+{{ form.as_p }}
+    <input type="submit" value="Start learning">
+    {% csrf_token %}
+</form>
+
+<form class="container" action="{% url 'lesson:add_theme' %}">
+            <button>Add new theme to chapter {{section.name}}</button>
+
+</form>
+
+
+{% endblock %}
