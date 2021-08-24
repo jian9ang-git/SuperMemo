@@ -4,22 +4,20 @@ from memo.models import Theme, Question, Goal, Section
 
 
 class LearningForm(forms.ModelForm):
-    section = forms.CharField(max_length=500,
-                              widget=forms.TextInput(attrs={'placeholder': 'Enter your first goal chapter here'}))
-    theme = forms.CharField(max_length=500,
-                            widget=forms.TextInput(attrs={'placeholder': 'Enter your first goal theme here'}))
-    question = forms.CharField(max_length=500)
-    answer = forms.CharField(max_length=500)
+
+    question = forms.CharField(max_length=500, required=True,
+                               widget=forms.TextInput(attrs={'placeholder': 'Enter your question'}))
+    answer = forms.CharField(max_length=500, required=True,
+                             widget=forms.TextInput(attrs={'placeholder': 'Enter the answer'}))
 
     class Meta:
         model = Question
-        fields = ['section', 'theme', 'question', 'answer']
+        fields = ['question', 'answer']
 
-# theme = forms.CharField(max_length=500,
-#                             widget=forms.TextInput(attrs={'placeholder': 'Enter your first goal theme here'}))
 
 class ChooseSectionForm(forms.ModelForm):
-    name = forms.ModelChoiceField(queryset=Section.objects.all())
+    name = forms.ModelChoiceField(queryset=Section.objects.all(),
+                                  widget=forms.TextInput(attrs={'placeholder': 'Choose section'}))
 
     def __init__(self, *args, **kwargs):
         goal_id = kwargs.pop('goal_id', None)
@@ -34,7 +32,8 @@ class ChooseSectionForm(forms.ModelForm):
 
 
 class ChooseThemeForm(forms.ModelForm):
-    name = forms.ModelChoiceField(queryset=Theme.objects.all())
+    name = forms.ModelChoiceField(queryset=Theme.objects.all(),
+                                  widget=forms.TextInput(attrs={'placeholder': 'Choose theme'}))
 
     def __init__(self, *args, **kwargs):
         section_id = kwargs.pop('section_id', None)

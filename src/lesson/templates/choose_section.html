@@ -9,11 +9,9 @@
     {% csrf_token %}
 </form>
 
-<tr><td>
-        <form class="container" action="{% url 'lesson:add_section' %}">
-            <button>Add new chapter</button>
-        </form>
-</td></tr>
-
+<a>Add new section to goal {{goal.name}}</a>
+<form class="container" action="{% url 'lesson:add_section' %}">
+    <button>Add</button>
+</form>
 
 {% endblock %}

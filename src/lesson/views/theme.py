@@ -21,10 +21,12 @@ class ChooseThemePage(View):
         if form.is_valid():
             cd = form.cleaned_data
             request.session['lesson_theme_id'] = Theme.objects.get(name=cd['name']).id
-            section = Section.objects.get(pk=request.session['lesson_section_id'])
-            theme = Theme.objects.get(pk=request.session['lesson_theme_id'])
+            return redirect('lesson:sure')
+        else:
             goal = Goal.objects.get(pk=request.session['goal_id'])
-        return render(request, 'goal_page.html', {'goal': goal, 'section': section, 'theme': theme})
+            section = Section.objects.get(pk=request.session['lesson_section_id'])
+            form = ChooseThemeForm(section_id=request.session['lesson_section_id'])
+            return render(request, 'choose_theme.html', {'form': form, 'goal': goal, 'section': section})
 
 
 @method_decorator(login_required, name='dispatch')
