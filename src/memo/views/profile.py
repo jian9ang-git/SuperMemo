@@ -1,9 +1,11 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.views import View
-from memo.models import Profile, Goal, Question, Theme
+from django.views.decorators.http import require_POST
+
+from memo.models import Profile, Goal, Question, Theme, Section
 from django.contrib.auth.models import User
-from .forms import PersonalDataEditForm, AddGoalForm
+from memo.forms import PersonalDataEditForm, AddGoalForm
 
 
 class HomePage(View):
@@ -16,16 +18,16 @@ class HomePage(View):
 
 class ProfilePage(View):
     def get(self, request, *args, **kwargs):
-        user = User.objects.get(username=kwargs['username'])
-        profile = user.profile
+        profile = request.user.profile
         goals = profile.goals.all()
-        return render(request, 'profile.html', {'profile': profile,
-                                                'username': kwargs['username'],
-                                                'goals': goals})
+
+        return render(request, 'profile_page.html', {'profile': profile,
+                                                     'goals': goals,
+                                                     'username': kwargs['username']})
 
     def post(self, request, *args, **kwargs):
         profile = Profile.objects.get(pk=request.session['user_id'])
-        return render(request, 'profile.html', {})
+        return render(request, 'profile_page.html', {})
 
 
 class ProfilePageBasic(View):
@@ -51,7 +53,7 @@ class EditPage(View):
                                              'email': user.email,
                                              'first_name': user.first_name,
                                              'last_name': user.last_name},
-                                    instance=request.user)
+                                    instance=user)
         return render(request, 'edit.html', {'form': form})
 
     def post(self, request, *args, **kwargs):
@@ -60,27 +62,3 @@ class EditPage(View):
             user = form.save(commit=True)
             return redirect('memo:profile', user.username)
         return render(request, 'edit.html', {'form': form})
-
-
-class AddGoalPage(View):
-    def get(self, request, *args, **kwargs):
-        form = AddGoalForm
-        return render(request, 'add_goal.html', {'form': form})
-
-    def post(self, request, *args, **kwargs):
-        form = AddGoalForm(request.POST or None)
-        if form.is_valid():
-            cd = form.cleaned_data
-            user = request.user
-            profile = user.profile
-            goal = Goal.objects.create(name=cd['name'], profile=profile)
-        return redirect('memo:profile_basic')
-
-
-class GoalPage(View):
-    def get(self, request, *args, **kwargs):
-        questions = Question.objects.get(goal__id=kwargs['id'])
-        return render(request, 'goal_page.html', {'questions': questions})
-
-    def post(self, request, *args, **kwargs):
-        pass
