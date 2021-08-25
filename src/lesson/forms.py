@@ -16,8 +16,7 @@ class LearningForm(forms.ModelForm):
 
 
 class ChooseSectionForm(forms.ModelForm):
-    name = forms.ModelChoiceField(queryset=Section.objects.all(),
-                                  widget=forms.TextInput(attrs={'placeholder': 'Choose section'}))
+    name = forms.ModelChoiceField(queryset=Section.objects.all(), empty_label='Choose chapter')
 
     def __init__(self, *args, **kwargs):
         goal_id = kwargs.pop('goal_id', None)
@@ -32,8 +31,7 @@ class ChooseSectionForm(forms.ModelForm):
 
 
 class ChooseThemeForm(forms.ModelForm):
-    name = forms.ModelChoiceField(queryset=Theme.objects.all(),
-                                  widget=forms.TextInput(attrs={'placeholder': 'Choose theme'}))
+    name = forms.ModelChoiceField(queryset=Theme.objects.all(), empty_label='Choose theme')
 
     def __init__(self, *args, **kwargs):
         section_id = kwargs.pop('section_id', None)

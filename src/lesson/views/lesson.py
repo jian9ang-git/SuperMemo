@@ -26,42 +26,50 @@ class LessonPage(View):
 
         profile = request.user.profile
         goal = Goal.objects.get(pk=request.session['goal_id'])
-        name = goal.lesson.count + 1
-        lesson = Lesson.objects.create(name=name, goal=goal, profile=profile)
-        request.session['active_lesson_id'] = lesson.id
+        if request.session['active_lesson_id']:
+            lesson = Lesson.objects.get(pk=request.session['active_lesson_id'])
+        else:
+            name = goal.lessons.count() + 1
+            lesson = Lesson.objects.create(name=name, goal=goal, profile=profile)
+            request.session['active_lesson_id'] = lesson.id
 
         form = LearningForm
-        return render('lesson.html', {'form': form, 'lesson': lesson})
+        return render(request, 'lesson.html', {'form': form, 'lesson': lesson})
 
     def post(self, request, *args, **kwargs):
         form = LearningForm(request.POST or None)
-        cd = form.cleaned_data
         goal = Goal.objects.get(pk=request.session['goal_id'])
         section = Section.objects.get(pk=request.session['lesson_section_id'])
         theme = Theme.objects.get(pk=request.session['lesson_theme_id'])
+        lesson = Lesson.objects.get(pk=request.session['active_lesson_id'])
         if form.is_valid():
+            cd = form.cleaned_data
             question = cd['question']
             answer = cd['answer']
-            Question.objects.create(question=question,
-                                    answer=answer,
-                                    profile=request.user.profile,
-                                    goal=goal,
-                                    section=section,
-                                    theme=theme)
+            new_question = Question.objects.create(question=question,
+                                                   answer=answer,
+                                                   lesson=lesson,
+                                                   goal=goal,
+                                                   section=section,
+                                                   theme=theme)
             form = LearningForm
-            return render('lesson.html', {'form': form})
+            return render(request, 'lesson.html', {'form': form, 'lesson': lesson})
         else:
-            return render('lesson.html', {'form': form})
+            return render(request, 'lesson.html', {'form': form, 'lesson': lesson})
 
 
+@method_decorator(login_required, name='dispatch')
 class EndLessonPage(View):
     def get(self, request, *args, **kwargs):
-        lesson = Lesson.objects.get(pk=request.session['lesson_id'])
+        lesson = Lesson.objects.get(pk=request.session['active_lesson_id'])
         return render(request, 'end_lesson.html', {'lesson': lesson})
 
     def post(self, request, *args, **kwargs):
-        # lesson_cart = LessonCart(request)
-        # lesson = lesson_cart[request.session['lesson_id']]['lesson']
-        lesson = Lesson.objects.get(pk=request.session['lesson_id'])
-        lesson.set(active_lesson=False)
-        # lesson_cart.clear()
+        if request.POST.get('end') == 'End lesson':
+            goal = Goal.objects.get(pk=request.session['goal_id'])
+            request.session['active_lesson_id'] = False
+            request.session['lesson_section_id'] = False
+            request.session['lesson_theme_id'] = False
+            return redirect('memo:goal_page', goal_id=goal.id)
+        else:
+            return redirect('lesson:lesson_page')

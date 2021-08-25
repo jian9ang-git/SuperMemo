@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 <h1>{{goal.name}}</h1>
-<h1>Choose chapter of your lesson</h1>
+<h1>Choose chapter</h1>
 
 <form class="container" method="POST">
 {{ form }}
@@ -9,9 +9,9 @@
     {% csrf_token %}
 </form>
 
-<a>Add new section to goal {{goal.name}}</a>
+<h1>or</h1>
 <form class="container" action="{% url 'lesson:add_section' %}">
-    <button>Add</button>
+    <button>Add new chapter</button>
 </form>
 
 {% endblock %}

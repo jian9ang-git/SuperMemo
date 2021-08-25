@@ -4,14 +4,14 @@
 
 {% block content %}
 
-<a>Is all correct?</a>
-<a>Goal - {{goal.name}}</a>
-<a>Section - {{section.name}}</a>
-<a>Theme - {{theme.name}}</a>
+<a>Is all correct?</a><br>
+<a>Goal - {{goal.name}}</a><br>
+<a>Section - {{section.name}}</a><br>
+<a>Theme - {{theme.name}}</a><br>
 
 
 <form class="container" action="{% url 'lesson:lesson_page' %}">
-    <button>Start lesson {{goal.lessons.count+1}}</button>
+    <button>Start lesson</button>
 </form>
 
 
