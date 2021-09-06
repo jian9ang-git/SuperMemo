@@ -8,6 +8,7 @@ from django.views.generic import TemplateView
 from lesson.forms import ChooseSectionForm, ChooseThemeForm, LearningForm
 
 
+
 @method_decorator(login_required, name='dispatch')
 class SurePage(View):
     def get(self, request, *args, **kwargs):
