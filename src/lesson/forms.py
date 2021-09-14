@@ -4,7 +4,6 @@ from memo.models import Theme, Question, Goal, Section
 
 
 class LearningForm(forms.ModelForm):
-
     question = forms.CharField(max_length=500, required=True,
                                widget=forms.TextInput(attrs={'placeholder': 'Enter your question'}))
     answer = forms.CharField(max_length=500, required=True,

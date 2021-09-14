@@ -14,7 +14,7 @@ class LoginView(View):
         return render(request, 'login.html', {'form': form})
 
     def post(self, request, *args, **kwargs):
-        form = LoginForm(request.POST or None)
+        form = LoginForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
             username = cd['username']
@@ -31,7 +31,9 @@ class LoginView(View):
             else:
                 return HttpResponse('Invalid login')
         else:
-            return render(request, 'login.html', {'form': form})
+            return redirect('account:login')
+            # better to redirect to login
+            # return render(request, 'login.html', {'form': form})
 
 
 class LogoutView(View):

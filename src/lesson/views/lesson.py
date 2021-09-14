@@ -8,7 +8,6 @@ from django.views.generic import TemplateView
 from lesson.forms import ChooseSectionForm, ChooseThemeForm, LearningForm
 
 
-
 @method_decorator(login_required, name='dispatch')
 class SurePage(View):
     def get(self, request, *args, **kwargs):
@@ -18,7 +17,7 @@ class SurePage(View):
         return render(request, 'sure_page.html', {'goal': goal, 'section': section, 'theme': theme})
 
     def post(self, request, *args, **kwargs):
-        pass
+        return redirect('lesson:lesson_page')
 
 
 @method_decorator(login_required, name='dispatch')
@@ -27,7 +26,7 @@ class LessonPage(View):
 
         profile = request.user.profile
         goal = Goal.objects.get(pk=request.session['goal_id'])
-        if request.session['active_lesson_id']:
+        if 'active_lesson_id' in request.session:
             lesson = Lesson.objects.get(pk=request.session['active_lesson_id'])
         else:
             name = goal.lessons.count() + 1

@@ -10,8 +10,9 @@
 <a>Theme - {{theme.name}}</a><br>
 
 
-<form class="container" action="{% url 'lesson:lesson_page' %}">
+<form class="container" method="POST">
     <button>Start lesson</button>
+    {% csrf_token %}
 </form>
 
 

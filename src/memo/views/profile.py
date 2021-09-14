@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.http import require_POST
 
@@ -11,9 +12,9 @@ from memo.forms import PersonalDataEditForm, AddGoalForm
 class HomePage(View):
     def get(self, request, *args, **kwargs):
         return render(request, 'home.html', {})
-
-    def post(self, request, *args, **kwargs):
-        return render(request, 'home.html', {})
+    #
+    # def post(self, request, *args, **kwargs):
+    #     return render(request, 'home.html', {})
 
 
 class ProfilePage(View):
@@ -25,9 +26,9 @@ class ProfilePage(View):
                                                      'goals': goals,
                                                      'username': kwargs['username']})
 
-    def post(self, request, *args, **kwargs):
-        profile = Profile.objects.get(pk=request.session['user_id'])
-        return render(request, 'profile_page.html', {})
+    # def post(self, request, *args, **kwargs):
+    #     # profile = Profile.objects.get(pk=request.session['user_id'])
+    #     return render(request, 'profile_page.html', {})
 
 
 class ProfilePageBasic(View):
@@ -46,9 +47,11 @@ class ProfilePageBasic(View):
             return redirect('account:login')
 
 
+@method_decorator(login_required, name='dispatch')
 class EditPage(View):
     def get(self, request, *args, **kwargs):
-        user = User.objects.get(pk=request.session['user_id'])
+        # user = request.session['user_id']
+        user = request.user
         form = PersonalDataEditForm(initial={'username': user.username,
                                              'email': user.email,
                                              'first_name': user.first_name,

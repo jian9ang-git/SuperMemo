@@ -13,7 +13,7 @@ from django.contrib.auth.decorators import user_passes_test
 
 
 @method_decorator(login_required, name='dispatch')
-class GoalPage(TestMixin1, View):  # Todo: decorator user_passes_test
+class GoalPage(View):  # Todo: decorator user_passes_test
     def get(self, request, *args, **kwargs):
         goal = Goal.objects.get(pk=kwargs['goal_id'])
         request.session['goal_id'] = kwargs['goal_id']  # Todo: attension goal_id
