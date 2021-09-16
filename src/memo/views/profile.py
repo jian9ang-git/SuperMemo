@@ -12,9 +12,6 @@ from memo.forms import PersonalDataEditForm, AddGoalForm
 class HomePage(View):
     def get(self, request, *args, **kwargs):
         return render(request, 'home.html', {})
-    #
-    # def post(self, request, *args, **kwargs):
-    #     return render(request, 'home.html', {})
 
 
 class ProfilePage(View):
@@ -26,20 +23,9 @@ class ProfilePage(View):
                                                      'goals': goals,
                                                      'username': kwargs['username']})
 
-    # def post(self, request, *args, **kwargs):
-    #     # profile = Profile.objects.get(pk=request.session['user_id'])
-    #     return render(request, 'profile_page.html', {})
-
 
 class ProfilePageBasic(View):
     def get(self, request, *args, **kwargs):
-        username = request.user.username
-        if username:
-            return redirect('memo:profile', username=username)
-        else:
-            return redirect('account:login')
-
-    def post(self, request, *args, **kwargs):
         username = request.user.username
         if username:
             return redirect('memo:profile', username=username)

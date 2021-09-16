@@ -12,6 +12,7 @@ urlpatterns = [
     path('', include(('lesson.urls', 'lesson'), namespace='lesson')),
     path('account/', include(('account.urls', 'account'), namespace='account')),
     path('', include(('memo.urls', 'memo'), namespace='memo')),
+    # path('api/', include(('memo.api.urls', 'memo'), namespace='memo_api')),
 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -32,8 +32,6 @@ class LoginView(View):
                 return HttpResponse('Invalid login')
         else:
             return redirect('account:login')
-            # better to redirect to login
-            # return render(request, 'login.html', {'form': form})
 
 
 class LogoutView(View):

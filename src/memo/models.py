@@ -7,7 +7,7 @@ from django.db.models import OneToOneField
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     photo = models.ImageField(upload_to='user_images/%Y/%m/%d', default='user_images/default.jpg')
-    # ToDo Спросить про def __str__
+
 
 
 class Goal(models.Model):
