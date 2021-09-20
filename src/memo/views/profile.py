@@ -36,7 +36,6 @@ class ProfilePageBasic(View):
 @method_decorator(login_required, name='dispatch')
 class EditPage(View):
     def get(self, request, *args, **kwargs):
-        # user = request.session['user_id']
         user = request.user
         form = PersonalDataEditForm(initial={'username': user.username,
                                              'email': user.email,

@@ -25,7 +25,7 @@ class LoginView(View):
                     login(request, user)
                     request.session['user_id'] = user.id
                     return redirect('memo:profile', username=username)
-                    # return HttpResponse('Authenticated successfully')
+                    # return redirect('memo:profile_basic')
                 else:
                     return HttpResponse('Disabled account')
             else:

@@ -3,19 +3,19 @@ import factory.fuzzy
 from memo import models
 
 
-# class UserFactory(factory.django.DjangoModelFactory):
-#     class Meta:
-#         model = models.User
-#     username = factory.fuzzy.FuzzyText(prefix='user', length=50)
-#     password = '121212ab'
-#
-#
-# class ProfileFactory(factory.django.DjangoModelFactory):
-#     class Meta:
-#         model = models.Profile
-#
-#     user = factory.SubFactory(UserFactory)
-#     photo = factory.django.ImageField(from_path='user_images/default.jpg')
+class UserFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = models.User
+    username = factory.fuzzy.FuzzyText(prefix='user', length=50)
+    password = '121212ab'  # Todo method make_password, посмотреть документацию FactoryBoy
+
+
+class ProfileFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = models.Profile
+
+    user = factory.SubFactory(UserFactory)
+    photo = factory.django.ImageField(from_path='user_images/default.jpg')
 
 
 class GoalFactory(factory.django.DjangoModelFactory):
