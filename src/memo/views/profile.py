@@ -17,10 +17,10 @@ class HomePage(View):
 class ProfilePage(View):
     def get(self, request, *args, **kwargs):
         user = request.user
-        if User.objects.filter(profile__id=user.id).exists():
+        if User.objects.filter(profile__id=user.id).exists():  # Todo Нужно ли тестировать эту ветку?
             # profile = Profile.objects.get(user=request.user)
-            profile = user.profile  # Todo Нужно ли тестировать эту ветку?
-        else:
+            profile = user.profile
+        else:  # Todo И эту ветку?
             profile = Profile.objects.create(
                 id=request.user.id,
                 user=request.user
@@ -53,8 +53,10 @@ class EditPage(View):
         return render(request, 'edit.html', {'form': form})
 
     def post(self, request, *args, **kwargs):
-        form = PersonalDataEditForm(request.POST or None, instance=request.user)
+        form = PersonalDataEditForm(request.POST, instance=request.user)
         if form.is_valid():
+            cd = form.cleaned_data  # Todo Добавил 58 и 59, т.к. без них ломался тест
+            username = cd['username']  #
             user = form.save(commit=True)
-            return redirect('memo:profile', user.username)
+            return redirect('memo:profile', username=username)
         return render(request, 'edit.html', {'form': form})

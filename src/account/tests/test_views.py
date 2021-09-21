@@ -106,7 +106,6 @@ class AccountTest(TestCase):
         form = MagicMock
         mock_registration_form.return_value = form
         mock_render.return_value = expected_result
-        mock_registration_form.return_value = form
         actual_result = self.client.get(reverse('account:registration'), data={})
         mock_render.assert_called_with(actual_result.wsgi_request, 'registration/registration.html', {'form': form})
         self.assertEqual(actual_result, expected_result)

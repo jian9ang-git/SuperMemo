@@ -102,3 +102,34 @@ class ProfilePageTest(TestCase):
         login = self.client.login(username='testuser', password='121212test')
         actual_result = self.client.get(reverse('memo:edit'), data={})
         mock_render.assert_called_once_with(actual_result.wsgi_request, 'edit.html', {'form': form})
+
+    @patch('memo.views.profile.redirect')
+    @patch('memo.views.profile.PersonalDataEditForm')
+    def test_logined_user_post_edit_page_valid_form(self, mock_form, mock_redirect):
+        expected_result = HttpResponseRedirect('/profile/testuser')
+        # form = MagicMock()
+        # mock_form.return_value = form
+        mock_form().is_valid.return_value = True
+        mock_form().cleaned_data = {'username': 'testuser',
+                                    'password': '121212test',
+                                    'email': 'testemail@test.test'}
+        mock_redirect.return_value = expected_result
+        login = self.client.login(username='testuser', password='121212test')
+        actual_result = self.client.post(reverse('memo:edit'), data={})
+        mock_redirect.assert_called_once_with('memo:profile', username='testuser')  # Todo проблема с username
+        self.assertEqual(actual_result, expected_result)
+        self.assertEqual(actual_result.status_code, 302)
+
+    @patch('memo.views.profile.render')
+    @patch('memo.views.profile.PersonalDataEditForm')
+    def test_logined_user_post_edit_page_not_valid_form(self, mock_form, mock_render):
+        expected_result = HttpResponse()
+        form = MagicMock()
+        mock_form.return_value = form  # Todo Ловил ошибку из-за скобок после mock_form
+        mock_form().is_valid.return_value = False
+        mock_render.return_value = expected_result
+        login = self.client.login(username='testuser', password='121212test')
+        actual_result = self.client.post(reverse('memo:edit'), data={})
+        mock_render.assert_called_once_with(actual_result.wsgi_request, 'edit.html', {'form': form})
+        self.assertEqual(actual_result, expected_result)
+        self.assertEqual(actual_result.status_code, 200)
