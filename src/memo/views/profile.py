@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.http import require_POST
@@ -16,7 +16,15 @@ class HomePage(View):
 
 class ProfilePage(View):
     def get(self, request, *args, **kwargs):
-        profile = request.user.profile
+        user = request.user
+        if User.objects.filter(profile__id=user.id).exists():
+            # profile = Profile.objects.get(user=request.user)
+            profile = user.profile  # Todo Нужно ли тестировать эту ветку?
+        else:
+            profile = Profile.objects.create(
+                id=request.user.id,
+                user=request.user
+            )
         goals = profile.goals.all()
 
         return render(request, 'profile_page.html', {'profile': profile,

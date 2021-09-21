@@ -4,7 +4,6 @@ import django_heroku
 from django.urls import reverse_lazy
 
 
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'jian9ang@gmail.com'
