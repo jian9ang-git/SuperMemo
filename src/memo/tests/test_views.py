@@ -72,24 +72,25 @@ class ProfilePageTest(TestCase):
         mock_redirect.assert_called_with('memo:profile', username='testuser')
         self.assertEqual(actual_result, expected_result)
 
-    @patch('memo.views.profile.Profile')  # Todo - проблема с request -> goals = profile.goals.all()
-    @patch('memo.views.profile.Goal')
-    def test_logined_user_get_profile(self, mock_goal, mock_profile):
+    def test_logined_user_get_profile(self):
         factory = RequestFactory()
         request = factory.get('')
         request.user = self.user
-
         expected_result = HttpResponse()
         login = self.client.login(username='testuser', password='121212test')
-
         actual_result = self.client.get(reverse('memo:profile', kwargs={'username': 'testuser'}))
+
         self.assertTemplateUsed(actual_result, 'profile_page.html', 'base.html')
         self.assertEqual(actual_result.status_code, 200)
         self.assertEqual(actual_result.context['profile'], self.profile)
-
-        # self.assertEqual(actual_result.context['goals'], self.profile.goals.all())  # Todo 1 != 1
-
         self.assertEqual(actual_result.context['username'], 'testuser')
+        # Todo Чтобы обойти ошибку 1 != 1 сделал такую проверку для goals = profile.goals.all()
+        q_goals = self.profile.goals.all()
+        i = actual_result.context['goals'].count()
+        j = q_goals.count()
+        if self.assertEqual(i, j):
+            for index in range(i-1):
+                self.assertEqual(actual_result.context['goals'][index], q_goals[index])
 
     @patch('memo.views.profile.render')
     @patch('memo.views.profile.PersonalDataEditForm')
