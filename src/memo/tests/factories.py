@@ -1,13 +1,12 @@
 import factory.fuzzy
-
 from memo import models
 
 
 class UserFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = models.User
-    username = factory.fuzzy.FuzzyText(prefix='user', length=50)
-    password = '121212ab'  # Todo method make_password, посмотреть документацию FactoryBoy
+    username = factory.Sequence(lambda n: f'test_user{n}')
+    email = factory.LazyAttribute(lambda obj: f'{obj.username}@test.test')
 
 
 class ProfileFactory(factory.django.DjangoModelFactory):
@@ -15,14 +14,13 @@ class ProfileFactory(factory.django.DjangoModelFactory):
         model = models.Profile
 
     user = factory.SubFactory(UserFactory)
-    photo = factory.django.ImageField(from_path='user_images/default.jpg')
 
 
 class GoalFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = models.Goal
 
-    name = factory.fuzzy.FuzzyText(prefix='goal', length=50)
+    name = factory.Sequence(lambda n: 'goal%d' % n)
     profile = factory.SubFactory(ProfileFactory)
 
 
@@ -30,7 +28,7 @@ class SectionFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = models.Section
 
-    name = factory.fuzzy.FuzzyText(prefix='section', length=50)
+    name = factory.Sequence(lambda n: 'section%d' % n)
     goal = factory.SubFactory(GoalFactory)
 
 
@@ -38,7 +36,7 @@ class ThemeFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = models.Theme
 
-    name = factory.fuzzy.FuzzyText(prefix='theme', length=50)
+    name = factory.Sequence(lambda n: 'theme%d' % n)
     section = factory.SubFactory(SectionFactory)
 
 
@@ -46,19 +44,17 @@ class LessonFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = models.Lesson
 
-    name = factory.fuzzy.FuzzyInteger(1, step=1)
+    name = factory.Sequence(lambda n: '%d' % n)
     profile = factory.SubFactory(ProfileFactory)
     goal = factory.SubFactory(GoalFactory)
-    section = factory.SubFactory(SectionFactory)
-    theme = factory.SubFactory(ThemeFactory)
 
 
 class QuestionFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = models.Question
 
-    question = factory.fuzzy.FuzzyText(prefix='questions', length=50)
-    answer = factory.fuzzy.FuzzyText(prefix='answer', length=50)
+    question = factory.Sequence(lambda n: 'question%d' % n)
+    answer = factory.Sequence(lambda n: 'answer%d' % n)
     goal = factory.SubFactory(GoalFactory)
     lesson = factory.SubFactory(LessonFactory)
     section = factory.SubFactory(SectionFactory)

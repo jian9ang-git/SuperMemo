@@ -34,8 +34,6 @@ class PersonalDataEditFormTest(TestCase):
         self.assertEqual(self.form.fields['first_name'].max_length, 150)
         self.assertEqual(self.form.fields['last_name'].max_length, 150)
 
-    # def test_valid_form(self):
-
 
 class AddGoalFormTest(TestCase):
     def setUp(self) -> None:

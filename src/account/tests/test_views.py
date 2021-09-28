@@ -1,16 +1,10 @@
-import os
 from unittest.mock import patch
-
 from django.http import HttpResponse, HttpResponseRedirect
 from django.test import TestCase, RequestFactory, Client
 from django.contrib.auth.models import User
 from unittest.mock import MagicMock
-from memo.forms import PersonalDataEditForm
 from memo.models import Profile, Goal
 from django.urls import reverse
-from django.core.files.uploadedfile import SimpleUploadedFile
-from django.contrib.auth import authenticate, login
-from memo.views import ProfilePage, ProfilePageBasic, EditPage, HomePage
 
 
 class AccountTest(TestCase):

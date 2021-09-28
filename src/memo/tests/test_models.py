@@ -44,25 +44,6 @@ class MemoTestCases(TestCase):
                                                 theme=self.theme,
                                                 goal=self.goal)
 
-    # def test_common_knowledge(self):
-    #     factory = RequestFactory()
-    #     request = factory.get('')
-    #     request.user = self.user
-    #
-    #
-    #     login(request, self.user)
-    #     resp = ProfilePage.as_view()(request, username='testuser')
-    #
-    #     #  Проверка, что пользователь залогинился
-    #     self.assertEqual(resp.status_code, 302)
-    #     self.assertEqual(str(resp.context['username']), 'testuser')
-    #
-    #     self.session = request.session
-    #     lesson_cart = self.session[settings.LESSON_SESSION_ID] = {}
-    #     self.lesson_cart = lesson_cart
-
-
-
     def test_profile_id_equal_user_id(self):
         self.assertEquals(self.user.id, self.profile.id)
 

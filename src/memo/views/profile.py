@@ -3,7 +3,6 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.http import require_POST
-
 from memo.models import Profile, Goal, Question, Theme, Section
 from django.contrib.auth.models import User
 from memo.forms import PersonalDataEditForm, AddGoalForm
@@ -17,15 +16,16 @@ class HomePage(View):
 class ProfilePage(View):
     def get(self, request, *args, **kwargs):
         user = request.user
-        if User.objects.filter(profile__id=user.id).exists():  # Todo Нужно ли тестировать эту ветку?
-            # profile = Profile.objects.get(user=request.user)
+        profile = User.objects.filter(profile__id=user.id).exists()
+        if profile:
             profile = user.profile
-        else:  # Todo И эту ветку?
+            goals = profile.goals.all()
+        else:
             profile = Profile.objects.create(
                 id=request.user.id,
                 user=request.user
             )
-        goals = profile.goals.all()
+            goals = profile.goals.all()
 
         return render(request, 'profile_page.html', {'profile': profile,
                                                      'goals': goals,

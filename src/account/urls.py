@@ -1,6 +1,4 @@
 from django.urls import path
-from django.contrib.auth import login
-# from .views import user_login
 from .views import LoginView, RegistrationView, LogoutView
 from django.conf.urls.static import static
 from django.conf import settings

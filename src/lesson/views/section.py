@@ -13,14 +13,12 @@ from lesson.forms import ChooseSectionForm, ChooseThemeForm, AddSectionForm, Add
 @method_decorator(login_required, name='dispatch')
 class ChooseSectionPage(View):
     def get(self, request, *args, **kwargs):
-        # name = goal.lessons.count() + 1
+        # name = goal.lessons.count() + 1  # Todo Подумать над именами целей
         # form.fields['name'].queryset = Section.objects.filter(goal__id=request.session['goal_id'])
         # sections = goal.sections.all().values('name')
-
         goal = Goal.objects.get(pk=request.session['goal_id'])
         form = ChooseSectionForm(goal_id=request.session['goal_id'])
         return render(request, 'choose_section.html', {'form': form, 'goal': goal})
-
         # return HttpResponseRedirect(reverse('choose_chapter', kwargs={'location': location}))
 
     def post(self, request, *args, **kwargs):

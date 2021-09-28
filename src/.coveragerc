@@ -8,16 +8,20 @@
     branch = True
     source = .
     omit =
+        */__init__.py
         /home/alex/PycharmProjects/SuperMemo/src/account/migrations/*
         /home/alex/PycharmProjects/SuperMemo/src/account/tests/*
+        /home/alex/PycharmProjects/SuperMemo/src/account/tests/__init__.py
         /home/alex/PycharmProjects/SuperMemo/src/account/__init__.py
 
         /home/alex/PycharmProjects/SuperMemo/src/memo/migrations/*
         /home/alex/PycharmProjects/SuperMemo/src/memo/tests/*
+        /home/alex/PycharmProjects/SuperMemo/src/memo/tests/__init__.py
         /home/alex/PycharmProjects/SuperMemo/src/memo/__init__.py
 
         /home/alex/PycharmProjects/SuperMemo/src/lesson/migrations/*
         /home/alex/PycharmProjects/SuperMemo/src/lesson/tests/*
+        /home/alex/PycharmProjects/SuperMemo/src/lesson/tests/__init__.py
         /home/alex/PycharmProjects/SuperMemo/src/lesson/__init__.py
 
         /home/alex/PycharmProjects/SuperMemo/src/media/*
@@ -27,4 +31,3 @@
         /home/alex/PycharmProjects/SuperMemo/src/src/settings.py
         /home/alex/PycharmProjects/SuperMemo/src/src/wsgi.py
 
-        */__init__.py

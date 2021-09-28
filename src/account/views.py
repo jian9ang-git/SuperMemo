@@ -1,11 +1,8 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout, user_logged_in, user_logged_out
+from django.contrib.auth import authenticate, login, logout
 from django.views import View
 from .forms import LoginForm, RegistrationForm
-from memo.models import Profile, Goal, Question
-from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
 
 
 class LoginView(View):
@@ -25,7 +22,6 @@ class LoginView(View):
                     login(request, user)
                     request.session['user_id'] = user.id
                     return redirect('memo:profile', username=username)
-                    # return redirect('memo:profile_basic')
                 else:
                     return HttpResponse('Disabled account')
             else:
@@ -64,22 +60,7 @@ class RegistrationView(View):
             else:
                 return HttpResponse('Invalid login')
             #  --------------------------------------------------------------------------
-            # new_user_id = new_user.id
-            #
-            # Profile.objects.create(
-            #     id=new_user_id,
-            #     user=new_user,
-            # )
-            # Todo Перенёс этот код в profile, т.к. тест об него ломался
-            #  ValueError: Cannot assign "<MagicMock name='RegistrationForm().save()' id='140309485276416'>":
-            #  "Profile.user" must be a "User" instance.
             username = cd['username']
-            # request.session['user_id'] = new_user_id
-            # Todo TypeError: Object of type MagicMock is not JSON serializable
         else:
             return render(request, 'registration/registration.html', {'form': form})
         return redirect('memo:profile', username=username)
-
-
-
-
