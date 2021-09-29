@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
 from memo.forms import PersonalDataEditForm, AddGoalForm
 from memo.models import Profile, Goal
-from memo.views import ProfilePage, ProfilePageBasic, EditPage, HomePage, GoalPage
+from memo.views import ProfilePage, ProfilePageBasic, EditPage, HomePage, GoalPage, AddGoalPage
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'src.settings'
 
@@ -86,7 +86,7 @@ class ProfilePageTest(TestCase):
         profile.goals.return_value = profile
         profile.goals.all.return_value = goals
         mock_render.return_value = expected_result
-        actual_result = ProfilePage.as_view()(request, username='testuser')  # Todo дебаггер не входит во вью, хотя раньше входилн
+        actual_result = ProfilePage.as_view()(request, username='testuser')
         mock_profile.create.assert_called_once_with(id=request.user.id, user=request.user)
         mock_render.assert_called_once_with(request,
                                             'profile_page.html',
@@ -145,21 +145,19 @@ class ProfilePageTest(TestCase):
         actual_result = self.client.post(reverse('memo:edit'), data={})
         mock_redirect.assert_called_once_with('memo:profile', username='testuser')
         self.assertEqual(actual_result, expected_result)
-        self.assertEqual(expected_result.status_code, actual_result.status_code)
 
     @patch('memo.views.profile.render')
     @patch('memo.views.profile.PersonalDataEditForm')
     def test_user_post_edit_page_not_valid_form(self, mock_form, mock_render):
         expected_result = HttpResponse()
         form = MagicMock()
-        mock_form.return_value = form  # Todo Ловил ошибку из-за скобок после mock_form
-        mock_form().is_valid.return_value = False  # Todo Если убрать скобки, ловлю ошибку
+        mock_form.return_value = form
+        mock_form().is_valid.return_value = False
         mock_render.return_value = expected_result
         login = self.client.login(username='testuser', password='121212test')
         actual_result = self.client.post(reverse('memo:edit'), data={})
         mock_render.assert_called_once_with(actual_result.wsgi_request, 'edit.html', {'form': form})
         self.assertEqual(actual_result, expected_result)
-        self.assertEqual(expected_result.status_code, actual_result.status_code)
 
     @patch('memo.views.goal.render')
     @patch('memo.views.goal.Goal.objects')
@@ -171,19 +169,12 @@ class ProfilePageTest(TestCase):
         mock_render.return_value = expected_result
         actual_result = self.client.get(reverse('memo:goal_page', kwargs={'goal_id': 1}), data={})
         mock_render.assert_called_once_with(actual_result.wsgi_request, 'goal_page.html', {'goal': goal})
+        self.assertEqual(expected_result, actual_result)
 
-    def test_user_get_add_goal_v1(self):
-        expected_result = HttpResponse
-        login = self.client.login(username='testuser', password='121212test')
-        actual_result = self.client.get(reverse('memo:add_goal'), data={})
-        form = AddGoalForm
-        self.assertEqual(actual_result.context['form'], form)
-        self.assertTemplateUsed(actual_result, 'add_goal.html')
-        self.assertEqual(expected_result.status_code, actual_result.status_code)
 
     @patch('memo.views.goal.render')
     @patch('memo.views.goal.AddGoalForm')
-    def test_user_get_add_goal_v2(self, mock_form, mock_render):
+    def test_user_get_addgoal(self, mock_form, mock_render):
         expected_result = HttpResponse()
         login = self.client.login(username='testuser', password='121212test')
         form = MagicMock()
@@ -191,10 +182,39 @@ class ProfilePageTest(TestCase):
         mock_render.return_value = expected_result
         actual_result = self.client.get(reverse('memo:add_goal'), data={})
         mock_render.assert_called_once_with(actual_result.wsgi_request, 'add_goal.html', {'form': form})
+        self.assertEqual(expected_result, actual_result)
 
-    def test_user_post_add_goal_valid_form(self):
+    @patch('memo.views.goal.redirect')
+    @patch('memo.views.goal.AddGoalForm')
+    @patch('memo.views.goal.Goal.objects.create')
+    def test_user_post_addgoal_valid_form(self, mock_create, mock_form, mock_redirect):
         expected_result = HttpResponseRedirect(redirect_to='profile/')
         login = self.client.login(username='testuser', password='121212test')
-        actual_result = self.client.post(reverse('memo:add_goal'), data={'name': 'testgoal'})
-        self.assertEqual(expected_result.status_code, actual_result.status_code)
+        factory = RequestFactory()
+        request = factory.post('/profile/add-goal')
+        mock_profile = MagicMock()
+        mock_goal = MagicMock()
+        request.user = MagicMock()
+        request.user.profile = mock_profile
+        mock_form().is_valid.return_value = True
+        cd = {'name': 'foo'}
+        mock_form().cleaned_data = cd
+        mock_create.return_value = mock_goal
+        mock_redirect.return_value = expected_result
 
+        actual_result = AddGoalPage.as_view()(request)
+        mock_create.assert_called_once_with(name='foo', profile=mock_profile)
+        mock_redirect.assert_called_once_with('memo:profile_basic')
+        self.assertEqual(expected_result, actual_result)
+
+    @patch('memo.views.goal.redirect')
+    @patch('memo.views.goal.AddGoalForm')
+    def test_user_post_addgoal_invalid_form(self, mock_form, mock_redirect):
+        expected_result = HttpResponseRedirect(redirect_to='profile/')
+        login = self.client.login(username='testuser', password='121212test')
+        mock_form().is_valid.return_value = False
+        mock_redirect.return_value = expected_result
+        actual_result = self.client.post(reverse('memo:add_goal'))
+
+        mock_redirect.assert_called_once_with('memo:profile_basic')
+        self.assertEqual(expected_result, actual_result)

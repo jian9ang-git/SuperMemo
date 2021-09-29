@@ -55,8 +55,8 @@ class EditPage(View):
     def post(self, request, *args, **kwargs):
         form = PersonalDataEditForm(request.POST, instance=request.user)
         if form.is_valid():
-            cd = form.cleaned_data  # Todo Добавил 58 и 59, т.к. без них ломался тест
-            username = cd['username']  #
+            cd = form.cleaned_data
+            username = cd['username']
             user = form.save(commit=True)
             return redirect('memo:profile', username=username)
         return render(request, 'edit.html', {'form': form})
