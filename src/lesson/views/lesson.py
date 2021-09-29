@@ -26,18 +26,18 @@ class LessonPage(View):
 
         profile = request.user.profile
         goal = Goal.objects.get(pk=request.session['goal_id'])
-        if 'active_lesson_id' in request.session:
+        if 'active_lesson_id' in request.session:  # Todo Пока нет декоратора active-lesson будет так
             lesson = Lesson.objects.get(pk=request.session['active_lesson_id'])
         else:
-            name = goal.lessons.count() + 1
+            name = goal.lessons.count() + 1  # Todo Подумать над именем урока
             lesson = Lesson.objects.create(name=name, goal=goal, profile=profile)
             request.session['active_lesson_id'] = lesson.id
 
-        form = LearningForm
+        form = LearningForm()
         return render(request, 'lesson.html', {'form': form, 'lesson': lesson})
 
     def post(self, request, *args, **kwargs):
-        form = LearningForm(request.POST or None)
+        form = LearningForm(request.POST)
         goal = Goal.objects.get(pk=request.session['goal_id'])
         section = Section.objects.get(pk=request.session['lesson_section_id'])
         theme = Theme.objects.get(pk=request.session['lesson_theme_id'])
@@ -52,7 +52,7 @@ class LessonPage(View):
                                                    goal=goal,
                                                    section=section,
                                                    theme=theme)
-            form = LearningForm
+            form = LearningForm()
             return render(request, 'lesson.html', {'form': form, 'lesson': lesson})
         else:
             return render(request, 'lesson.html', {'form': form, 'lesson': lesson})

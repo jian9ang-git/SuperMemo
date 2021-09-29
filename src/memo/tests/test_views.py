@@ -189,7 +189,6 @@ class ProfilePageTest(TestCase):
     @patch('memo.views.goal.Goal.objects.create')
     def test_user_post_addgoal_valid_form(self, mock_create, mock_form, mock_redirect):
         expected_result = HttpResponseRedirect(redirect_to='profile/')
-        login = self.client.login(username='testuser', password='121212test')
         factory = RequestFactory()
         request = factory.post('/profile/add-goal')
         mock_profile = MagicMock()
