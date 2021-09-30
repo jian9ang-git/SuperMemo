@@ -130,6 +130,7 @@ class ProfilePageTest(TestCase):
         login = self.client.login(username='testuser', password='121212test')
         actual_result = self.client.get(reverse('memo:edit'), data={})
         mock_render.assert_called_once_with(actual_result.wsgi_request, 'edit.html', {'form': form})
+        self.assertEqual(expected_result, actual_result)
 
     @patch('memo.views.profile.redirect')
     @patch('memo.views.profile.PersonalDataEditForm')
